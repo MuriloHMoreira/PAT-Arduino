@@ -19,12 +19,12 @@ float V_read = 0.0;
 #define SAMPLE_TIME 10000      // Sample time, in milliseconds
 
 
-// Create an array of five type K thermocouples
+// Create an array of four type J thermocouples
 Nanoshield_Termopar tc[] = {
-  Nanoshield_Termopar(7, TC_TYPE_K),  // Jumper on D7
-  Nanoshield_Termopar(8, TC_TYPE_K),  // Jumper on D8
-  Nanoshield_Termopar(10, TC_TYPE_K), // Jumper on D10
-  Nanoshield_Termopar(A3, TC_TYPE_K)  // Jumper on A3
+  Nanoshield_Termopar(7, TC_TYPE_J),  // Jumper on D7
+  Nanoshield_Termopar(8, TC_TYPE_J),  // Jumper on D8
+  Nanoshield_Termopar(10, TC_TYPE_J), // Jumper on D10
+  Nanoshield_Termopar(A3, TC_TYPE_J)  // Jumper on A3
 };
 const int numModules = sizeof(tc) / sizeof(Nanoshield_Termopar);
 
@@ -66,8 +66,8 @@ void printErrors(Nanoshield_Termopar tc) {
 }
 
 float convertVoltToVolFlow(float V_read) {
-  float q_0 = 0;
-  float q_max = 500;
+  float q_0 = -8.6;
+  float q_max = 111.6;
   float q;
   float V_0 = 2.69;
   float V_max = 3.63;
@@ -83,8 +83,10 @@ void loop()
     // Write current time to the file, in milliseconds
     unsigned long t = millis();
     dataFile.print(t);
+    Serial.print("Time [s]: ");
+    Serial.print(t / 1000);
     dataFile.print(',');
-    Serial.print("Voltage [V]: ");
+    Serial.print(", Voltage [V]: ");
     sensorRead = analogRead(sensorPin);
     float V_read = sensorRead * (5.0 / 1023.0);
     Serial.print(V_read);
